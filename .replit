@@ -41,3 +41,11 @@ waitForPort = 5000
 
 [agent]
 mockupState = "FULLSTACK"
+
+[userenv]
+
+[userenv.shared]
+SUPABASE_URL = "https://dzpzvmhgmfkxvfkcypbb.supabase.co"
+SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6cHp2bWhnbWZreHZma2N5cGJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU4OTA3ODUsImV4cCI6MjA4MTQ2Njc4NX0.Tlnp7-JKnUcA4aj5mal6KcGa0ltdWa2H1kN9x-pSO_E"
+VITE_SUPABASE_URL = "https://dzpzvmhgmfkxvfkcypbb.supabase.co"
+VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR6cHp2bWhnbWZreHZma2N5cGJiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjU4OTA3ODUsImV4cCI6MjA4MTQ2Njc4NX0.Tlnp7-JKnUcA4aj5mal6KcGa0ltdWa2H1kN9x-pSO_E"
