@@ -1,16 +1,23 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useLocation } from "wouter";
-import { createClient, User, Session } from "@supabase/supabase-js";
+import { createClient, User, Session, SupabaseClient } from "@supabase/supabase-js";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
 const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || "";
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+let supabase: SupabaseClient | null = null;
+
+if (supabaseUrl && supabaseAnonKey) {
+  supabase = createClient(supabaseUrl, supabaseAnonKey);
+}
+
+const isSupabaseConfigured = () => supabase !== null;
 
 type AuthContextType = {
   user: User | null;
   session: Session | null;
   isLoading: boolean;
+  isConfigured: boolean;
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name?: string, role?: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -25,7 +32,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [, setLocation] = useLocation();
 
   useEffect(() => {
-    // Get initial session
+    if (!isSupabaseConfigured() || !supabase) {
+      // Check localStorage for mock user
+      const mockUser = localStorage.getItem("mock_user");
+      if (mockUser) {
+        setUser(JSON.parse(mockUser));
+      }
+      setIsLoading(false);
+      return;
+    }
+
+    // Get initial session from Supabase
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       setUser(session?.user ?? null);
@@ -47,6 +64,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signIn = async (email: string, password: string) => {
     setIsLoading(true);
     try {
+      if (!isSupabaseConfigured() || !supabase) {
+        // Mock sign in
+        const mockUser = {
+          id: `mock-${Date.now()}`,
+          email,
+          user_metadata: { name: email.split("@")[0], role: "student" },
+          app_metadata: {},
+          aud: "mock",
+          created_at: new Date().toISOString(),
+        } as unknown as User;
+        setUser(mockUser);
+        localStorage.setItem("mock_user", JSON.stringify(mockUser));
+        setLocation("/dashboard");
+        return;
+      }
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -67,6 +100,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signUp = async (email: string, password: string, name?: string, role?: string) => {
     setIsLoading(true);
     try {
+      if (!isSupabaseConfigured() || !supabase) {
+        // Mock sign up
+        const mockUser = {
+          id: `mock-${Date.now()}`,
+          email,
+          user_metadata: { name: name || email.split("@")[0], role: role || "student" },
+          app_metadata: {},
+          aud: "mock",
+          created_at: new Date().toISOString(),
+        } as unknown as User;
+        setUser(mockUser);
+        localStorage.setItem("mock_user", JSON.stringify(mockUser));
+        setLocation("/dashboard");
+        return;
+      }
+
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -93,6 +142,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     setIsLoading(true);
     try {
+      if (!isSupabaseConfigured() || !supabase) {
+        setUser(null);
+        localStorage.removeItem("mock_user");
+        setLocation("/");
+        return;
+      }
+
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
 
@@ -107,7 +163,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, session, isLoading, signIn, signUp, signOut }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      session, 
+      isLoading, 
+      isConfigured: isSupabaseConfigured(),
+      signIn, 
+      signUp, 
+      signOut 
+    }}>
       {children}
     </AuthContext.Provider>
   );

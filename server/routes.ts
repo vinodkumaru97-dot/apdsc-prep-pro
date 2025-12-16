@@ -1,15 +1,37 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { supabase } from "./lib/supabase";
+import { supabase, isSupabaseConfigured } from "./lib/supabase";
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  
+  // Check if Supabase is configured
+  app.get("/api/auth/status", (req, res) => {
+    res.json({ 
+      configured: isSupabaseConfigured(),
+      message: isSupabaseConfigured() 
+        ? "Supabase authentication is ready" 
+        : "Supabase not configured - using mock authentication"
+    });
+  });
+
   // Auth Routes
   app.post("/api/auth/signup", async (req, res) => {
     try {
+      if (!isSupabaseConfigured() || !supabase) {
+        // Mock signup for development
+        const { email, name, role } = req.body;
+        const mockUser = {
+          id: `mock-${Date.now()}`,
+          email,
+          user_metadata: { name: name || email.split("@")[0], role: role || "student" },
+        };
+        return res.json({ user: mockUser, session: { access_token: "mock-token" } });
+      }
+
       const { email, password, name, role } = req.body;
 
       const { data, error } = await supabase.auth.signUp({
@@ -35,6 +57,17 @@ export async function registerRoutes(
 
   app.post("/api/auth/signin", async (req, res) => {
     try {
+      if (!isSupabaseConfigured() || !supabase) {
+        // Mock signin for development
+        const { email } = req.body;
+        const mockUser = {
+          id: `mock-${Date.now()}`,
+          email,
+          user_metadata: { name: email.split("@")[0], role: "student" },
+        };
+        return res.json({ user: mockUser, session: { access_token: "mock-token" } });
+      }
+
       const { email, password } = req.body;
 
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -54,6 +87,10 @@ export async function registerRoutes(
 
   app.post("/api/auth/signout", async (req, res) => {
     try {
+      if (!isSupabaseConfigured() || !supabase) {
+        return res.json({ success: true });
+      }
+
       const { error } = await supabase.auth.signOut();
 
       if (error) {
@@ -68,6 +105,10 @@ export async function registerRoutes(
 
   app.get("/api/auth/session", async (req, res) => {
     try {
+      if (!isSupabaseConfigured() || !supabase) {
+        return res.status(401).json({ error: "Not authenticated" });
+      }
+
       const authHeader = req.headers.authorization;
       
       if (!authHeader || !authHeader.startsWith("Bearer ")) {
