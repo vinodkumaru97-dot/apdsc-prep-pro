@@ -1,0 +1,170 @@
+I want to design and develop a complete AI-powered mobile application and responsive web platform for Andhra Pradesh DSC (AP DSC) exam preparation, aimed at helping users crack the exam without referring to any external books, coaching institutes, or materials.
+
+Target Users
+
+Beginner (no prior teaching or exam background)
+
+Intermediate (some syllabus coverage)
+
+Advanced / Pro (revision + rank improvement)
+
+Core Objective
+
+The app should act as an all-in-one digital coaching institute with structured learning, adaptive practice, continuous evaluation, and real-time exam updates.
+
+Mandatory Features
+1. User Onboarding & Personalization
+
+Role selection: SGT / SA / TGT / PGT / PET
+
+Subject selection
+
+Medium selection: Telugu / English / Bilingual
+
+Level assessment test
+
+Personalized study plan with daily targets
+
+2. Complete Syllabus Coverage
+
+AP DSC syllabus mapped topic-wise and sub-topic-wise
+
+Content aligned with:
+
+SCERT textbooks
+
+University education syllabi
+
+Previous AP DSC notifications
+
+Beginner to Pro depth explanation
+
+3. Smart Study Material
+
+Concept explanations (text + examples)
+
+Telugu & English explanations
+
+Visual learning (diagrams, flowcharts)
+
+Teacher-style notes
+
+Printable & offline-ready notes
+
+4. Practice & Evaluation Engine
+
+Topic-wise MCQs
+
+Difficulty levels: Easy / Medium / Hard
+
+Previous year questions (with solutions)
+
+Timed practice mode
+
+Daily quizzes
+
+5. Mock Exams & Ranking
+
+Full-length AP DSC mock tests
+
+Section-wise tests
+
+Time-bound exams
+
+Auto-evaluation
+
+State-level rank simulation
+
+Performance comparison dashboard
+
+6. AI-Based Learning Assistant
+
+Explains wrong answers
+
+Suggests weak areas
+
+Revises frequently forgotten topics
+
+Generates custom practice sets
+
+Daily motivation & reminders
+
+7. Revision & Memory Tools
+
+Quick revision notes
+
+Formula sheets
+
+Flashcards
+
+Mind maps
+
+Last-30-days crash revision plan
+
+8. Latest Updates & Notifications
+
+AP DSC notifications
+
+Exam dates
+
+Syllabus changes
+
+Hall ticket & result alerts
+
+9. Exam Strategy & Guidance
+
+Subject-wise scoring strategies
+
+Time management tips
+
+Mistake-avoidance techniques
+
+Toppers’ preparation methods
+
+10. Multi-Platform Support
+
+Android App
+
+iOS App
+
+Web Application (responsive)
+
+Offline access for downloaded content
+
+11. Admin & Content Management
+
+Admin dashboard
+
+Question bank management
+
+Analytics & user progress tracking
+
+Content update system
+
+Technical Requirements
+
+Scalable architecture
+
+Secure authentication
+
+Fast performance on low-end devices
+
+Cloud-based backend
+
+Output Required
+
+App architecture
+
+Feature-wise breakdown
+
+Tech stack recommendation
+
+UI/UX flow
+
+Database design
+
+AI integration plan
+
+Deployment & publishing steps
+
+The final product should feel like a personal tutor + coaching institute + exam analyst, fully focused on cracking AP DSC.
