@@ -3,18 +3,22 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight, BookOpen, Clock, Target, Trophy } from "lucide-react";
+import { useAuth } from "@/lib/supabase-auth";
 import * as Icons from "lucide-react";
 
 export default function Dashboard() {
+  const { user } = useAuth();
+  const userName = user?.user_metadata?.name || user?.email?.split("@")[0] || "Student";
+
   return (
     <div className="space-y-8">
       {/* Welcome Section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">Welcome back, Student!</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Welcome back, {userName}!</h1>
           <p className="text-muted-foreground">You have completed 45% of your weekly target.</p>
         </div>
-        <Button>Resume Learning</Button>
+        <Button data-testid="button-resume-learning">Resume Learning</Button>
       </div>
 
       {/* Stats Grid */}
@@ -25,7 +29,7 @@ export default function Dashboard() {
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">124.5h</div>
+            <div className="text-2xl font-bold" data-testid="text-study-time">124.5h</div>
             <p className="text-xs text-muted-foreground">+2.5h from yesterday</p>
           </CardContent>
         </Card>
@@ -35,7 +39,7 @@ export default function Dashboard() {
             <BookOpen className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">42/120</div>
+            <div className="text-2xl font-bold" data-testid="text-topics-covered">42/120</div>
             <p className="text-xs text-muted-foreground">35% syllabus completed</p>
           </CardContent>
         </Card>
@@ -45,7 +49,7 @@ export default function Dashboard() {
             <Target className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">78%</div>
+            <div className="text-2xl font-bold" data-testid="text-mock-score">78%</div>
             <p className="text-xs text-muted-foreground">+4% improvement</p>
           </CardContent>
         </Card>
@@ -55,7 +59,7 @@ export default function Dashboard() {
             <Trophy className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">#1,240</div>
+            <div className="text-2xl font-bold" data-testid="text-state-rank">#1,240</div>
             <p className="text-xs text-muted-foreground">Top 15% of aspirants</p>
           </CardContent>
         </Card>
@@ -69,7 +73,6 @@ export default function Dashboard() {
           </CardHeader>
           <CardContent className="space-y-6">
             {SUBJECTS.map((subject) => {
-              // Dynamically get icon component
               const IconComponent = (Icons as any)[subject.icon] || BookOpen;
               
               return (

@@ -2,7 +2,7 @@ import { Switch, Route } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
-import { AuthProvider } from "@/lib/mock-auth";
+import { AuthProvider } from "@/lib/supabase-auth";
 import { Layout } from "@/components/layout/Layout";
 import NotFound from "@/pages/not-found";
 

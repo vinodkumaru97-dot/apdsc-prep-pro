@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useAuth } from "@/lib/mock-auth";
+import { useAuth } from "@/lib/supabase-auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,24 +17,26 @@ export default function AuthPage() {
     e.preventDefault();
     setIsLoading(true);
     
-    // Get email from form
     const formData = new FormData(e.target as HTMLFormElement);
     const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const name = formData.get("name") as string;
+    const role = formData.get("role") as string;
     
     try {
       if (type === "login") {
-        await signIn(email);
+        await signIn(email, password);
       } else {
-        await signUp(email);
+        await signUp(email, password, name, role);
       }
       toast({
         title: "Success",
         description: "Welcome to AP DSC Prep!",
       });
-    } catch (error) {
+    } catch (error: any) {
       toast({
         title: "Error",
-        description: "Something went wrong. Please try again.",
+        description: error.message || "Something went wrong. Please try again.",
         variant: "destructive",
       });
     } finally {
@@ -65,21 +67,39 @@ export default function AuthPage() {
             <Card>
               <CardHeader>
                 <CardTitle>Login</CardTitle>
-                <CardDescription>Enter your email to access your personalized dashboard.</CardDescription>
+                <CardDescription>Enter your credentials to access your dashboard.</CardDescription>
               </CardHeader>
               <form onSubmit={(e) => handleAuth(e, "login")}>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email</Label>
-                    <Input id="email" name="email" type="email" placeholder="name@example.com" required />
+                    <Input 
+                      id="email" 
+                      name="email" 
+                      type="email" 
+                      placeholder="name@example.com" 
+                      required 
+                      data-testid="input-login-email"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="password">Password</Label>
-                    <Input id="password" name="password" type="password" required />
+                    <Input 
+                      id="password" 
+                      name="password" 
+                      type="password" 
+                      required 
+                      data-testid="input-login-password"
+                    />
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full" type="submit" disabled={isLoading}>
+                  <Button 
+                    className="w-full" 
+                    type="submit" 
+                    disabled={isLoading}
+                    data-testid="button-login"
+                  >
                     {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Sign In
                   </Button>
@@ -97,25 +117,57 @@ export default function AuthPage() {
               <form onSubmit={(e) => handleAuth(e, "signup")}>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
+                    <Label htmlFor="signup-name">Full Name</Label>
+                    <Input 
+                      id="signup-name" 
+                      name="name" 
+                      type="text" 
+                      placeholder="Your Name" 
+                      data-testid="input-signup-name"
+                    />
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="signup-email">Email</Label>
-                    <Input id="signup-email" name="email" type="email" placeholder="name@example.com" required />
+                    <Input 
+                      id="signup-email" 
+                      name="email" 
+                      type="email" 
+                      placeholder="name@example.com" 
+                      required 
+                      data-testid="input-signup-email"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="signup-password">Password</Label>
-                    <Input id="signup-password" name="password" type="password" required />
+                    <Input 
+                      id="signup-password" 
+                      name="password" 
+                      type="password" 
+                      required 
+                      data-testid="input-signup-password"
+                    />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="role">Target Post</Label>
-                    <select className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50">
-                      <option>SGT (Secondary Grade Teacher)</option>
-                      <option>SA (School Assistant)</option>
-                      <option>TGT (Trained Graduate Teacher)</option>
-                      <option>PGT (Post Graduate Teacher)</option>
+                    <select 
+                      name="role" 
+                      className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-sm shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                      data-testid="select-signup-role"
+                    >
+                      <option value="student">SGT (Secondary Grade Teacher)</option>
+                      <option value="student">SA (School Assistant)</option>
+                      <option value="student">TGT (Trained Graduate Teacher)</option>
+                      <option value="student">PGT (Post Graduate Teacher)</option>
                     </select>
                   </div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full" type="submit" disabled={isLoading}>
+                  <Button 
+                    className="w-full" 
+                    type="submit" 
+                    disabled={isLoading}
+                    data-testid="button-signup"
+                  >
                     {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     Create Account
                   </Button>

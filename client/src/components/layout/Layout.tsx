@@ -8,13 +8,11 @@ import {
   BarChart2, 
   Settings, 
   LogOut,
-  Menu,
-  X
+  Menu
 } from "lucide-react";
-import { useAuth } from "@/lib/mock-auth";
+import { useAuth } from "@/lib/supabase-auth";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { useState } from "react";
 
 const NAVIGATION = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
@@ -27,7 +25,7 @@ const NAVIGATION = [
 
 export function Sidebar() {
   const [location] = useLocation();
-  const { signOut } = useAuth();
+  const { signOut, user } = useAuth();
 
   const NavContent = () => (
     <div className="flex flex-col h-full bg-sidebar text-sidebar-foreground border-r border-sidebar-border">
@@ -36,6 +34,9 @@ export function Sidebar() {
           AP DSC Prep
         </h1>
         <p className="text-xs text-muted-foreground mt-1">AI-Powered Learning</p>
+        {user?.user_metadata?.name && (
+          <p className="text-xs text-muted-foreground mt-2">Welcome, {user.user_metadata.name}</p>
+        )}
       </div>
 
       <div className="flex-1 py-6 px-4 space-y-1">
